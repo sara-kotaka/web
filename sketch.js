@@ -8,21 +8,16 @@ function updatePosition(entity) {
 }
 
 // プレイヤーエンティティ用
-let img;
-let c;
-function preload(){
-  img = loadImage('p5.kaeru.jpg');
-}
 
 
 
 
 function createPlayer() {
   return {
-    x: 200,
-    y: 300,
-    vx: 0,
-    vy: 0
+    x: 200,//位置
+    y: 300,//位置
+    vx: 0,//速度
+    vy: 0//速度
   };
 }
 
@@ -119,79 +114,6 @@ function entitiesAreColliding(
   return true;
 }
 
-//画面効果ゆれ
-
-//シェイクの強さ
-let shakeMagnitude;
-
-//シェイク係数
-let shakeDampingFactor;
-
-//シェイクリセット
-function resetShake(){
-  shakeMagnitude = 0;
-  shakeDampingFactor = 0.95;
-
-}
-
-//シェイク発動
-function setShake(magnitude){
-  shakeMagnitude = magnitude;
-
-}
-//シェイク更新
-function updateShake(){
-  shakeMagnitude *= shakeDampingFactor;
-
-}
-//シェイク適用
-function applyShake(){
-  if (shakeMagnitude < 1) return;
-//画面ずらす
-  translate(
-    random(-shakeMagnitude, shakeMagnitude),
-    random(-shakeMagnitude, shakeMagnitude)
-  );
- 
-}
-
-//スクリーンフラッシュ
-//フラッシュの値
-let flashAlpha;
-
-//フラッシュの持続時間
-let flashDuration;
-
-//フラッシュの残り時間
-let flashRemainingCount;
-
-//フラッシュリセット
-function resetFlash(){
-  flashAlpha = 255;
-  flashDuration = 2;
-  flashRemainingCount = 0;
-
-}
-//フラッシュ発動
-function setFlash(alpha,duration){
-  flashAlpha = alpha;
-  flashDuration = duration;
-  flashRemainingCount = duration;
-}
-  //フラッシュ更新
-function updateFlash(){
-  flashRemainingCount -= 1;
-}
-
- 
-//フラッシュ適用
-function applyFlash(){
-  if(flashRemainingCount <= 0) return;
-  
-  let alphaRatio = flashRemainingCount / flashDuration;
-  background(255, alphaRatio * flashAlpha);
-}
-
 
 // ---- ゲーム全体に関わる部分 --------------------------------------------
 
@@ -237,20 +159,11 @@ function resetGame() {
   //パーティクルの配列準備//
   particles = [];
 
-  resetShake();
-  resetFlash();
 }
 
-function setGameOver(){
-  gameState = 'gameover';
-  setShake(300);
-  setFlash(128,60);
-  
-}
 /** ゲームの更新 */
 function updateGame() {
-  updateShake();
-  updateFlash();
+
 
   // ゲームオーバーなら更新しない
   if (gameState === "gameover") return;
@@ -292,8 +205,7 @@ function updateGame() {
 }
 /** ゲームの描画 */
 function drawGame() {
-  //スクリーンシェイク
-  applyShake();
+
 
   // 全エンティティを描画
   //水色
@@ -304,8 +216,7 @@ function drawGame() {
   // ゲームオーバーならそれ用の画面を表示
   if (gameState === "gameover") drawGameoverScreen();
 
-  //スクリーンフラッシュ
-  applyFlash();
+
 }
 
 /** マウスボタンが押されたときのゲームへの影響 */
@@ -329,8 +240,7 @@ function setup() {
   rectMode(CENTER);
 
   resetGame();
-  img.loadPixels();
-  c = img.get(img.width/2, img.height/2);
+
 }
 
 function draw() {
